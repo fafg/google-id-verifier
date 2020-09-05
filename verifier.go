@@ -33,10 +33,10 @@ type CertsVerifier struct {
 }
 
 // VerifyIDToken checks the validity of a given Google-issued OAuth2 token ID
-func (v *CertsVerifier) VerifyIDToken(idToken string, audience ...string) error {
+func (v *CertsVerifier) VerifyIDToken(idToken string, audience ...string) (*ClaimSet, error) {
 	certs, err := getFederatedSignOnCerts()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if len(audience) == 0 {
 		audience = v.DefaultAudience
@@ -45,16 +45,38 @@ func (v *CertsVerifier) VerifyIDToken(idToken string, audience ...string) error 
 }
 
 // VerifySignedJWTWithCerts is golang port of OAuth2Client.prototype.verifySignedJwtWithCerts
-func VerifySignedJWTWithCerts(token string, certs *Certs, allowedAuds []string, issuers []string, maxExpiry time.Duration) error {
+func VerifySignedJWTWithCerts(token string, certs *Certs, allowedAuds []string,
+	issuers []string, maxExpiry time.Duration) (*ClaimSet, error) {
+
 	header, claimSet, err := parseJWT(token)
 	if err != nil {
-		return err
+		return nil, err
 	}
+
+	err = basicChecks(token, certs, header, claimSet, maxExpiry)
+	if err != nil {
+		return nil, err
+	}
+
+	err = checkIssuer(claimSet, issuers)
+	if err != nil {
+		return nil, err
+	}
+
+	err = checkAudiences(claimSet, allowedAuds)
+	if err != nil {
+		return nil, err
+	}
+
+	return claimSet, nil
+}
+
+func basicChecks(token string, certs *Certs, header *jws.Header, claimSet *ClaimSet, maxExpiry time.Duration) error {
 	key := certs.Keys[header.KeyID]
 	if key == nil {
 		return ErrPublicKeyNotFound
 	}
-	err = jws.Verify(token, key)
+	err := jws.Verify(token, key)
 	if err != nil {
 		return ErrWrongSignature
 	}
@@ -80,19 +102,29 @@ func VerifySignedJWTWithCerts(token string, certs *Certs, allowedAuds []string, 
 		return ErrTokenUsedTooLate
 	}
 
-	found := false
+	return nil
+}
+
+func checkIssuer(claimSet *ClaimSet, issuers []string) error {
+	var found = false
+
 	for _, issuer := range issuers {
 		if issuer == claimSet.Iss {
 			found = true
 			break
 		}
 	}
+
 	if !found {
 		return fmt.Errorf("wrong issuer: %s", claimSet.Iss)
 	}
 
+	return nil
+}
+
+func checkAudiences(claimSet *ClaimSet, audiences []string) error {
 	audFound := false
-	for _, aud := range allowedAuds {
+	for _, aud := range audiences {
 		if aud == claimSet.Aud {
 			audFound = true
 			break
