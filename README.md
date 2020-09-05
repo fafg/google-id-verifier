@@ -1,3 +1,8 @@
+# Build
+
+![Google-Id-Verifier](https://github.com/fafg/google-id-verifier/workflows/Google-Id-Verifier/badge.svg?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8437df4db93c43648a9979cab36fee7e)](https://app.codacy.com/manual/fafg/google-id-verifier?utm_source=github.com&utm_medium=referral&utm_content=fafg/google-id-verifier&utm_campaign=Badge_Grade_Dashboard)
+
 # google-id-verifier
 
 Golang port of [OAuth2Client.prototype.verifyIdToken](https://github.com/google/google-auth-library-nodejs/blob/master/src/auth/oauth2client.ts) from [google-auth-library-nodejs](https://github.com/google/google-auth-library-nodejs)
@@ -25,13 +30,13 @@ if err == nil {
 
 ## Features
 
-- Fetch public key from www.googleapis.com/oauth2/v3/certs
-- Respect cache-control in response from www.googleapis.com/oauth2/v3/certs
-- JWT Parser
-- Check Signature 
-- Check IssueTime, ExpirationTime with ClockSkew
-- Check Issuer
-- Check Audience
+  - Fetch public key from www.googleapis.com/oauth2/v3/certs
+  - Respect cache-control in response from www.googleapis.com/oauth2/v3/certs
+  - JWT Parser
+  - Check Signature 
+  - Check IssueTime, ExpirationTime with ClockSkew
+  - Check Issuer
+  - Check Audience
 
 ## Deps
 
