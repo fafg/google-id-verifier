@@ -1,4 +1,4 @@
-package googleIDVerifier
+package main
 
 import "fmt"
 
