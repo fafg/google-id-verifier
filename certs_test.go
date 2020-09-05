@@ -92,13 +92,13 @@ func equalsRSAKeys(a, b map[string]*rsa.PublicKey, id string) error {
 }
 
 func TestGetFederatedSignonCerts(t *testing.T) {
-	certs, err := getFederatedSignonCerts()
+	certs, err := getFederatedSignOnCerts()
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	cachedCerts, err := getFederatedSignonCerts()
+	cachedCerts, err := getFederatedSignOnCerts()
 	if err != nil {
 		t.Error(err)
 		return

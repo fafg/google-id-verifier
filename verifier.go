@@ -34,7 +34,7 @@ type CertsVerifier struct {
 
 // VerifyIDToken checks the validity of a given Google-issued OAuth2 token ID
 func (v *CertsVerifier) VerifyIDToken(idToken string, audience ...string) error {
-	certs, err := getFederatedSignonCerts()
+	certs, err := getFederatedSignOnCerts()
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func VerifySignedJWTWithCerts(token string, certs *Certs, allowedAuds []string, 
 		}
 	}
 	if !found {
-		return fmt.Errorf("Wrong issuer: %s", claimSet.Iss)
+		return fmt.Errorf("wrong issuer: %s", claimSet.Iss)
 	}
 
 	audFound := false
@@ -99,7 +99,7 @@ func VerifySignedJWTWithCerts(token string, certs *Certs, allowedAuds []string, 
 		}
 	}
 	if !audFound {
-		return fmt.Errorf("Wrong aud: %s", claimSet.Aud)
+		return fmt.Errorf("wrong aud: %s", claimSet.Aud)
 	}
 
 	return nil

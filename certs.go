@@ -20,7 +20,7 @@ var (
 	cachedCerts *Certs
 
 	// Google Sign on certificates.
-	googleOAuth2FederatedSignonCertsURL = "https://www.googleapis.com/oauth2/v3/certs"
+	googleOAuth2FederatedSignOnCertsURL = "https://www.googleapis.com/oauth2/v3/certs"
 )
 
 type key struct {
@@ -36,13 +36,14 @@ type response struct {
 	Keys []*key `json:"keys"`
 }
 
-func getFederatedSignonCerts() (*Certs, error) {
+func getFederatedSignOnCerts() (*Certs, error) {
 	if cachedCerts != nil {
 		if time.Now().Before(cachedCerts.Expiry) {
 			return cachedCerts, nil
 		}
 	}
-	res, cacheAge, err := fetchFederatedSignonCerts()
+
+	res, cacheAge, err := fetchFederatedSignOnCerts()
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ func getFederatedSignonCerts() (*Certs, error) {
 	return parsedCerts, nil
 }
 
-func fetchFederatedSignonCerts() (*response, int64, error) {
-	resp, err := http.Get(googleOAuth2FederatedSignonCertsURL)
+func fetchFederatedSignOnCerts() (*response, int64, error) {
+	resp, err := http.Get(googleOAuth2FederatedSignOnCertsURL)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -102,9 +103,6 @@ func parseCerts(res *response, cacheAge int64) (*Certs, error) {
 				return nil, err
 			}
 			ei := big.NewInt(0).SetBytes(e).Int64()
-			if err != nil {
-				return nil, err
-			}
 			keys[key.Kid] = &rsa.PublicKey{
 				N: big.NewInt(0).SetBytes(n),
 				E: int(ei),
