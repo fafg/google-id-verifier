@@ -8,8 +8,8 @@ packageVersion=$2
 function getLatestTag() {
   echo "cloning into the temp folder"
   mkdir temp && cd temp || exit 1
-  git clone https://github.com/azure-open-tools/event-hubs-cli.git
-  cd event-hubs-cli || exit 1
+  git clone https://github.com/fafg/google-id-verifier.git
+  cd google-id-verifier || exit 1
   git fetch --all
 }
 
@@ -42,6 +42,6 @@ echo "New Version: $version"
 echo "Latest Tag: $latestTag"
 echo -e "Change Log Since Latest Tag: \n$changeLog"
 
-hub release create -m "Azure Event Hubs Lib $version" -m "$changeLog" "$version"
+hub release create -m "google-id-verifier $version" -m "$changeLog" "$version"
 
 deleteTempFolder
