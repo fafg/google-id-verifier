@@ -1,5 +1,7 @@
 # google-id-verifier
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8437df4db93c43648a9979cab36fee7e)](https://app.codacy.com/manual/fafg/google-id-verifier?utm_source=github.com&utm_medium=referral&utm_content=fafg/google-id-verifier&utm_campaign=Badge_Grade_Dashboard)
+
 Golang port of [OAuth2Client.prototype.verifyIdToken](https://github.com/google/google-auth-library-nodejs/blob/master/src/auth/oauth2client.ts) from [google-auth-library-nodejs](https://github.com/google/google-auth-library-nodejs)
 
 Verifies Google-issued ID tokens without making http request to the tokeninfo API.
